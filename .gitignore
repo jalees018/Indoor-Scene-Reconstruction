@@ -8,6 +8,8 @@ Data/
 
 # --- Claude Code session state ---
 .claude/
+CLAUDE.md
+Instr.md
 
 # --- Python ---
 __pycache__/
