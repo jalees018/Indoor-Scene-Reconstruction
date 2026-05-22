@@ -59,25 +59,10 @@ Before running on your own video, **calibrate the camera and edit
 
 ## Pipeline Overview
 
-```
-video.mp4
-   │
-   │  Pass 1a — frame extraction (run.sh → Run_Init.py --extract-only)
-   ▼
-rgb/*.png + rgb.txt                      TUM-style timestamped frames
-   │
-   │  Pass 1b — visual SLAM (run.sh → mono_tum)
-   ▼
-CameraTrajectory.txt + MapPoints.txt     per-frame poses + sparse 3D map
-   │
-   │  Pass 2 — MiDaS depth + per-frame scale fit (run.sh → Run_Init.py)
-   ▼
-scene_pointcloud.ply + scene_mesh.ply    dense colored cloud + Poisson mesh
-   │
-   │  Pass 3 — Gaussian Splatting (run.sh → Run_Splat.py)
-   ▼
-splats.ply                               photoreal 3DGS representation
-```
+1. **Pass 1a — frame extraction.** `run.sh` calls `Run_Init.py --extract-only` to turn `video.mp4` into TUM-style `rgb/*.png` plus a `rgb.txt` timestamp list.
+2. **Pass 1b — visual SLAM.** `mono_tum` runs ORB-SLAM3 on the frames, writing `CameraTrajectory.txt` (per-frame poses) and `MapPoints.txt` (sparse 3D map).
+3. **Pass 2 — dense depth + scale fit.** `Run_Init.py` runs MiDaS, fits an affine per frame against the SLAM landmarks, backprojects, and writes `scene_pointcloud.ply` + `scene_mesh.ply`.
+4. **Pass 3 — Gaussian Splatting.** `Run_Splat.py` seeds gsplat from the point cloud and trains against the frames, producing `splats.ply`.
 
 Each pass produces the prior the next pass needs:
 
