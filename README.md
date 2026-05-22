@@ -17,6 +17,24 @@ applies to any monocular indoor video given a calibrated camera.
 
 ---
 
+## Results
+
+Held-out novel views from the TUM `freiburg1/xyz` run, rendered from the
+trained Gaussian Splatting model after 7000 iterations.
+
+| GT | Ours (step 7000) |
+|----|-------------------|
+| ![GT view 0](docs/results/gt_view000.png)  | ![Ours view 0](docs/results/step07000_view000.png)  |
+| ![GT view 8](docs/results/gt_view008.png)  | ![Ours view 8](docs/results/step07000_view008.png)  |
+| ![GT view 16](docs/results/gt_view016.png) | ![Ours view 16](docs/results/step07000_view016.png) |
+| ![GT view 24](docs/results/gt_view024.png) | ![Ours view 24](docs/results/step07000_view024.png) |
+
+The point cloud, mesh, and `.ply` splat file produced by the same run are
+not committed (the dense point cloud is ~400 MB) — rerun the pipeline to
+regenerate them locally.
+
+---
+
 ## Quickstart
 
 ```bash
