@@ -38,8 +38,8 @@ regenerate them locally.
 ## Quickstart
 
 ```bash
-git clone --recurse-submodules https://github.com/<you>/SLAM.git
-cd SLAM
+git clone --recurse-submodules https://github.com/jalees018/Indoor-Scene-Reconstruction.git
+cd Indoor-Scene-Reconstruction
 ./setup.sh                              # one-time: build deps + env
 conda activate slam-recon
 ./run.sh path/to/scene.mp4 configs/MyVideo.yaml
