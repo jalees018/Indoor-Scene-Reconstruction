@@ -1,0 +1,47 @@
+# --- pipeline outputs ---
+output_*/
+*.ply
+!configs/**/*.ply
+
+# --- datasets (download via setup.sh / fetched per-run) ---
+Data/
+
+# --- Claude Code session state ---
+.claude/
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+.ipynb_checkpoints/
+
+# --- build artifacts (submodules) ---
+ORB_SLAM3/build/
+ORB_SLAM3/lib/
+ORB_SLAM3/Examples/Monocular/mono_tum
+ORB_SLAM3/Examples/Monocular/mono_euroc
+ORB_SLAM3/Examples/Monocular/mono_kitti
+ORB_SLAM3/Examples/Monocular/mono_realsense_D435i
+ORB_SLAM3/Examples/Monocular/mono_realsense_t265
+ORB_SLAM3/Examples/Monocular-Inertial/
+ORB_SLAM3/Examples/RGB-D/
+ORB_SLAM3/Examples/RGB-D-Inertial/
+ORB_SLAM3/Examples/Stereo/
+ORB_SLAM3/Examples/Stereo-Inertial/
+ORB_SLAM3/Thirdparty/*/build/
+ORB_SLAM3/Thirdparty/*/lib/
+ORB_SLAM3/Vocabulary/ORBvoc.txt
+Pangolin/build/
+
+# --- ORB-SLAM3 run artifacts (will be regenerated under output_*/) ---
+ORB_SLAM3/CameraTrajectory.txt
+ORB_SLAM3/KeyFrameTrajectory.txt
+ORB_SLAM3/MapPoints.txt
+
+# --- editor / OS ---
+.vscode/
+.idea/
+.DS_Store
+*.swp
+*~

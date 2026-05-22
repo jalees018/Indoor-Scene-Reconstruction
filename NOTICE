@@ -1,0 +1,42 @@
+Third-party components used by this project.
+
+This project does not redistribute the binaries or source of the
+components below; they are pulled in as git submodules or installed via
+pip at setup time. Their licenses still apply.
+
+----
+
+ORB-SLAM3
+    https://github.com/UZ-SLAMLab/ORB_SLAM3
+    GPL-3.0
+    Local patches: see patches/orbslam3.patch (also GPL-3.0).
+    This is why the combined project is GPL-3.0.
+
+Pangolin
+    https://github.com/stevenlovegrove/Pangolin
+    MIT
+    Used by ORB-SLAM3 as its visualization / windowing dependency.
+
+DBoW2, g2o, Sophus
+    Vendored inside ORB_SLAM3/Thirdparty/. See their individual LICENSE
+    files (DBoW2: BSD-style with extra terms; g2o: BSD; Sophus: MIT).
+
+MiDaS (Intel ISL)
+    https://github.com/isl-org/MiDaS
+    MIT
+    Loaded at runtime via torch.hub; not redistributed.
+
+gsplat
+    https://github.com/nerfstudio-project/gsplat
+    Apache-2.0
+    Installed from PyPI / the gsplat wheel index; not redistributed.
+
+PyTorch, OpenCV, NumPy, Open3D
+    Standard pip / conda installs with their respective permissive
+    licenses (BSD-3 / Apache-2.0). Not redistributed.
+
+TUM RGB-D dataset (freiburg1/xyz)
+    https://vision.in.tum.de/data/datasets/rgbd-dataset
+    Creative Commons Attribution 4.0 International License.
+    Optional: only needed for the smoke-test in the README. Not included
+    in this repo by default.

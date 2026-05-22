@@ -1,0 +1,42 @@
+                    GNU GENERAL PUBLIC LICENSE
+                       Version 3, 29 June 2007
+
+ Copyright (C) 2007 Free Software Foundation, Inc. <http://fsf.org/>
+ Everyone is permitted to copy and distribute verbatim copies
+ of this license document, but changing it is not allowed.
+
+This project is licensed under the GNU General Public License v3.0,
+because it builds upon ORB-SLAM3 which is itself GPL-3.0. The combined
+work (these Python drivers + the patched ORB-SLAM3 it links against) is
+distributed under the same terms.
+
+The full text of the GPL-3.0 license is available at:
+
+    https://www.gnu.org/licenses/gpl-3.0.txt
+
+A verbatim copy is also bundled in the ORB-SLAM3 submodule at
+`ORB_SLAM3/LICENSE` after running `git submodule update --init`.
+
+----
+
+Original copyright on the Python drivers (Run_Init.py, Run_Splat.py,
+setup.sh, run.sh) and the patch in patches/orbslam3.patch:
+
+Copyright (C) 2026 the contributors of this repository.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <https://www.gnu.org/licenses/>.
+
+----
+
+See NOTICE for a per-component list of third-party licenses.

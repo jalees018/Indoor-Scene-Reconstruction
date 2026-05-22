@@ -1,0 +1,203 @@
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 016e743..8bc55aa 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ project(ORB_SLAM3)
+ 
+ IF(NOT CMAKE_BUILD_TYPE)
+@@ -12,20 +12,15 @@ set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall   -O3")
+ set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -march=native")
+ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -march=native")
+ 
+-# Check C++11 or C++0x support
++# C++14 is required by newer OpenCV / Pangolin
+ include(CheckCXXCompilerFlag)
+-CHECK_CXX_COMPILER_FLAG("-std=c++11" COMPILER_SUPPORTS_CXX11)
+-CHECK_CXX_COMPILER_FLAG("-std=c++0x" COMPILER_SUPPORTS_CXX0X)
+-if(COMPILER_SUPPORTS_CXX11)
+-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
++CHECK_CXX_COMPILER_FLAG("-std=c++14" COMPILER_SUPPORTS_CXX14)
++if(COMPILER_SUPPORTS_CXX14)
++   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++14")
+    add_definitions(-DCOMPILEDWITHC11)
+-   message(STATUS "Using flag -std=c++11.")
+-elseif(COMPILER_SUPPORTS_CXX0X)
+-   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++0x")
+-   add_definitions(-DCOMPILEDWITHC0X)
+-   message(STATUS "Using flag -std=c++0x.")
++   message(STATUS "Using flag -std=c++14.")
+ else()
+-   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++11 support. Please use a different C++ compiler.")
++   message(FATAL_ERROR "The compiler ${CMAKE_CXX_COMPILER} has no C++14 support. Please use a different C++ compiler.")
+ endif()
+ 
+ LIST(APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake_modules)
+diff --git a/Examples/Monocular/mono_tum.cc b/Examples/Monocular/mono_tum.cc
+index 0e7d922..54f7348 100644
+--- a/Examples/Monocular/mono_tum.cc
++++ b/Examples/Monocular/mono_tum.cc
+@@ -47,7 +47,7 @@ int main(int argc, char **argv)
+     int nImages = vstrImageFilenames.size();
+ 
+     // Create SLAM system. It initializes all system threads and gets ready to process frames.
+-    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,true);
++    ORB_SLAM3::System SLAM(argv[1],argv[2],ORB_SLAM3::System::MONOCULAR,false);
+     float imageScale = SLAM.GetImageScale();
+ 
+     // Vector for tracking time statistics
+@@ -150,6 +150,8 @@ int main(int argc, char **argv)
+ 
+     // Save camera trajectory
+     SLAM.SaveKeyFrameTrajectoryTUM("KeyFrameTrajectory.txt");
++    SLAM.SaveTrajectoryTUM("CameraTrajectory.txt");
++    SLAM.SaveMapPoints("MapPoints.txt");
+ 
+     return 0;
+ }
+diff --git a/Thirdparty/DBoW2/CMakeLists.txt b/Thirdparty/DBoW2/CMakeLists.txt
+index c312b25..68e0861 100644
+--- a/Thirdparty/DBoW2/CMakeLists.txt
++++ b/Thirdparty/DBoW2/CMakeLists.txt
+@@ -1,5 +1,6 @@
+-cmake_minimum_required(VERSION 2.8)
++cmake_minimum_required(VERSION 3.5)
+ project(DBoW2)
++set(CMAKE_CXX_STANDARD 14)
+ 
+ if(NOT CMAKE_BUILD_TYPE)
+   set(CMAKE_BUILD_TYPE Release)
+diff --git a/Thirdparty/Sophus/CMakeLists.txt b/Thirdparty/Sophus/CMakeLists.txt
+index 933445b..7b1ca79 100644
+--- a/Thirdparty/Sophus/CMakeLists.txt
++++ b/Thirdparty/Sophus/CMakeLists.txt
+@@ -1,4 +1,4 @@
+-cmake_minimum_required(VERSION 3.4)
++cmake_minimum_required(VERSION 3.5)
+ project(Sophus VERSION 1.1.0)
+ 
+ include(CMakePackageConfigHelpers)
+@@ -16,11 +16,11 @@ set(CMAKE_CXX_STANDARD 11)
+ IF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "Clang")
+    SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
+    SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
+-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra  -Wno-deprecated-register -Qunused-arguments -fcolor-diagnostics")
++   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra  -Wno-deprecated-register -Qunused-arguments -fcolor-diagnostics")
+ ELSEIF("${CMAKE_CXX_COMPILER_ID}" STREQUAL "GNU")
+    SET(CMAKE_CXX_FLAGS_DEBUG  "-O0 -g")
+    SET(CMAKE_CXX_FLAGS_RELEASE "-O3")
+-   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Werror -Wextra -std=c++11 -Wno-deprecated-declarations -ftemplate-backtrace-limit=0")
++   SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -Wextra -std=c++14 -Wno-deprecated-declarations -ftemplate-backtrace-limit=0")
+    SET(CMAKE_CXX_FLAGS_COVERAGE "${CMAKE_CXX_FLAGS_DEBUG} --coverage -fno-inline -fno-inline-small-functions -fno-default-inline")
+    SET(CMAKE_EXE_LINKER_FLAGS_COVERAGE "${CMAKE_EXE_LINKER_FLAGS_DEBUG} --coverage")
+    SET(CMAKE_SHARED_LINKER_FLAGS_COVERAGE "${CMAKE_SHARED_LINKER_FLAGS_DEBUG} --coverage")
+diff --git a/Thirdparty/g2o/CMakeLists.txt b/Thirdparty/g2o/CMakeLists.txt
+index 1a32ff9..212ae50 100644
+--- a/Thirdparty/g2o/CMakeLists.txt
++++ b/Thirdparty/g2o/CMakeLists.txt
+@@ -1,7 +1,8 @@
+-CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
++CMAKE_MINIMUM_REQUIRED(VERSION 3.5)
+ SET(CMAKE_LEGACY_CYGWIN_WIN32 0)
+ 
+ PROJECT(g2o)
++set(CMAKE_CXX_STANDARD 14)
+ 
+ SET(g2o_C_FLAGS)
+ SET(g2o_CXX_FLAGS)
+diff --git a/include/System.h b/include/System.h
+index 872c86e..b7a630b 100644
+--- a/include/System.h
++++ b/include/System.h
+@@ -158,6 +158,10 @@ public:
+     void SaveTrajectoryEuRoC(const string &filename, Map* pMap);
+     void SaveKeyFrameTrajectoryEuRoC(const string &filename, Map* pMap);
+ 
++    // Save all map points in the active map as world-frame xyz text.
++    // Call after Shutdown().
++    void SaveMapPoints(const string &filename);
++
+     // Save data used for initialization debug
+     void SaveDebugData(const int &iniIdx);
+ 
+diff --git a/src/LoopClosing.cc b/src/LoopClosing.cc
+index 319afb5..16b09bd 100644
+--- a/src/LoopClosing.cc
++++ b/src/LoopClosing.cc
+@@ -2409,9 +2409,9 @@ void LoopClosing::RunGlobalBundleAdjustment(Map* pActiveMap, unsigned long nLoop
+ 
+ 
+                     string strNameFile = pKF->mNameFile;
+-                    cv::Mat imLeft = cv::imread(strNameFile, CV_LOAD_IMAGE_UNCHANGED);
++                    cv::Mat imLeft = cv::imread(strNameFile, cv::IMREAD_UNCHANGED);
+ 
+-                    cv::cvtColor(imLeft, imLeft, CV_GRAY2BGR);
++                    cv::cvtColor(imLeft, imLeft, cv::COLOR_GRAY2BGR);
+ 
+                     vector<MapPoint*> vpMapPointsKF = pKF->GetMapPointMatches();
+                     int num_MPs = 0;
+@@ -2424,7 +2424,7 @@ void LoopClosing::RunGlobalBundleAdjustment(Map* pActiveMap, unsigned long nLoop
+                         num_MPs += 1;
+                         string strNumOBs = to_string(vpMapPointsKF[i]->Observations());
+                         cv::circle(imLeft, pKF->mvKeys[i].pt, 2, cv::Scalar(0, 255, 0));
+-                        cv::putText(imLeft, strNumOBs, pKF->mvKeys[i].pt, CV_FONT_HERSHEY_DUPLEX, 1, cv::Scalar(255, 0, 0));
++                        cv::putText(imLeft, strNumOBs, pKF->mvKeys[i].pt, cv::FONT_HERSHEY_DUPLEX, 1, cv::Scalar(255, 0, 0));
+                     }
+                     cout << "--It has " << num_MPs << " MPs matched in the map" << endl;
+ 
+diff --git a/src/System.cc b/src/System.cc
+index 60d9c51..735ffb5 100644
+--- a/src/System.cc
++++ b/src/System.cc
+@@ -569,11 +569,8 @@ bool System::isShutDown() {
+ void System::SaveTrajectoryTUM(const string &filename)
+ {
+     cout << endl << "Saving camera trajectory to " << filename << " ..." << endl;
+-    if(mSensor==MONOCULAR)
+-    {
+-        cerr << "ERROR: SaveTrajectoryTUM cannot be used for monocular." << endl;
+-        return;
+-    }
++    // Monocular guard removed: the relative-pose logic below works for monocular
++    // too, and we need per-frame poses for the MiDaS fusion pass (Run_Init.py).
+ 
+     vector<KeyFrame*> vpKFs = mpAtlas->GetAllKeyFrames();
+     sort(vpKFs.begin(),vpKFs.end(),KeyFrame::lId);
+@@ -1262,6 +1259,35 @@ void System::SaveTrajectoryKITTI(const string &filename)
+ }
+ 
+ 
++void System::SaveMapPoints(const string &filename)
++{
++    cout << endl << "Saving map points to " << filename << " ..." << endl;
++
++    Map* pActiveMap = mpAtlas->GetCurrentMap();
++    if (!pActiveMap)
++    {
++        cerr << "ERROR: No active map." << endl;
++        return;
++    }
++    vector<MapPoint*> vpMPs = pActiveMap->GetAllMapPoints();
++
++    ofstream f;
++    f.open(filename.c_str());
++    f << fixed;
++
++    size_t nSaved = 0;
++    for (MapPoint* pMP : vpMPs)
++    {
++        if (!pMP || pMP->isBad()) continue;
++        Eigen::Vector3f pos = pMP->GetWorldPos();
++        f << setprecision(7) << pos(0) << " " << pos(1) << " " << pos(2) << endl;
++        ++nSaved;
++    }
++    f.close();
++    cout << "Saved " << nSaved << " map points." << endl;
++}
++
++
+ void System::SaveDebugData(const int &initIdx)
+ {
+     // 0. Save initialization trajectory

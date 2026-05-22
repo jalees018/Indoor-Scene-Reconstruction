@@ -1,0 +1,9 @@
+[submodule "ORB_SLAM3"]
+	path = ORB_SLAM3
+	url = https://github.com/UZ-SLAMLab/ORB_SLAM3.git
+	# Pinned to upstream master @ 4452a3c (Update Dependencies.md).
+	# patches/orbslam3.patch is applied on top of this commit by setup.sh.
+[submodule "Pangolin"]
+	path = Pangolin
+	url = https://github.com/stevenlovegrove/Pangolin.git
+	# Pinned to upstream @ 7364b59 (add a patch version for small releases of bug fixes).

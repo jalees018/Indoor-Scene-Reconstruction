@@ -1,0 +1,50 @@
+%YAML:1.0
+
+# Calibration template for a custom phone / camera video.
+#
+# IMPORTANT: the values below are PLACEHOLDERS for a 1080x1920 portrait
+# phone video. Replace fx/fy/cx/cy with values from a real calibration
+# (e.g. OpenCV cv2.calibrateCamera on a checkerboard) — wrong intrinsics
+# are the single most common cause of SLAM failure or distorted output.
+
+File.version: "1.0"
+
+Camera.type: "PinHole"
+
+# --- Intrinsics (REPLACE) ---
+Camera1.fx: 1250.0
+Camera1.fy: 1250.0
+Camera1.cx: 540.0
+Camera1.cy: 960.0
+
+# --- Lens distortion (REPLACE; zero if undistorted source) ---
+Camera1.k1: 0.0
+Camera1.k2: 0.0
+Camera1.p1: 0.0
+Camera1.p2: 0.0
+Camera1.k3: 0.0
+
+# --- Sensor / video metadata ---
+Camera.fps: 30
+Camera.RGB: 1
+Camera.width: 1080
+Camera.height: 1920
+
+# --- ORB feature extractor (tuned for phone video, more texture variance) ---
+ORBextractor.nFeatures: 3000
+ORBextractor.scaleFactor: 1.2
+ORBextractor.nLevels: 8
+ORBextractor.iniThFAST: 12
+ORBextractor.minThFAST: 4
+
+# --- Viewer (ignored on headless servers) ---
+Viewer.KeyFrameSize: 0.05
+Viewer.KeyFrameLineWidth: 1.0
+Viewer.GraphLineWidth: 0.9
+Viewer.PointSize: 2.0
+Viewer.CameraSize: 0.08
+Viewer.CameraLineWidth: 3.0
+Viewer.ViewpointX: 0.0
+Viewer.ViewpointY: -0.7
+Viewer.ViewpointZ: -1.8
+Viewer.ViewpointF: 500.0
